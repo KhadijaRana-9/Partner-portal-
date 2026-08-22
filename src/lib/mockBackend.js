@@ -110,25 +110,41 @@ function categoryBySlug(slug) {
   return categories.find((c) => c.slug === slug)
 }
 
+// Real, verified product photography (Unsplash, direct CDN links checked for
+// content match before use — see the image-audit that replaced the old
+// picsum.photos random-seed placeholders, which showed unrelated landscapes/
+// objects instead of the actual product). The tempered glass protector has no
+// suitable free stock photo of the bare item, so it uses a local illustrated
+// asset instead of a mismatched photo (public/products/).
 const PRODUCT_SEED = [
-  ['clothing', 'Cotton Casual Shirt', 'cotton-casual-shirt', 'Breathable cotton shirt for everyday wear.', 2490, 2990, 'cl1', 120, 'CL-001'],
-  ['clothing', 'Slim Fit Jeans', 'slim-fit-jeans', 'Stretch-denim slim fit jeans.', 3290, null, 'cl2', 95, 'CL-002'],
-  ['clothing', 'Printed Kurta', 'printed-kurta', 'Lightweight printed cotton kurta.', 1990, 2390, 'cl3', 140, 'CL-003'],
-  ['mobile-accessories', 'Fast-Charge Power Bank 20000mAh', 'power-bank-20000', 'Dual USB-C fast charging power bank.', 3990, null, 'ma1', 80, 'MA-001'],
-  ['mobile-accessories', 'Wireless Earbuds Pro', 'wireless-earbuds-pro', 'Bluetooth 5.3 earbuds with charging case.', 4490, 5490, 'ma2', 60, 'MA-002'],
-  ['mobile-accessories', 'Tempered Glass Screen Protector', 'tempered-glass-protector', '9H hardness tempered glass, universal fit.', 490, null, 'ma3', 300, 'MA-003'],
-  ['herbal-products', 'Herbal Immunity Booster', 'herbal-immunity-booster', 'Natural herbal supplement for daily immunity.', 1590, null, 'hp1', 200, 'HP-001'],
-  ['herbal-products', 'Herbal Hair Oil', 'herbal-hair-oil', 'Cold-pressed herbal oil blend for hair growth.', 990, 1290, 'hp2', 180, 'HP-002'],
-  ['herbal-products', 'Herbal Green Tea', 'herbal-green-tea', 'Antioxidant-rich herbal green tea, 100 bags.', 690, null, 'hp3', 250, 'HP-003'],
-  ['watches', 'Classic Analog Watch', 'classic-analog-watch', 'Stainless steel analog watch with leather strap.', 4990, 5990, 'wt1', 60, 'WT-001'],
-  ['watches', 'Digital Sports Watch', 'digital-sports-watch', 'Water-resistant digital sports watch.', 2990, null, 'wt2', 70, 'WT-002'],
-  ['gents', 'Gents Leather Wallet', 'gents-leather-wallet', 'Genuine leather bifold wallet.', 1990, null, 'gt1', 150, 'GT-001'],
-  ['gents', 'Gents Formal Belt', 'gents-formal-belt', 'Genuine leather formal belt with metal buckle.', 1490, 1790, 'gt2', 130, 'GT-002'],
-  ['ladies', 'Ladies Embroidered Handbag', 'ladies-embroidered-handbag', 'Hand-embroidered everyday handbag.', 3490, 3990, 'ld1', 90, 'LD-001'],
-  ['ladies', 'Ladies Stone Earrings', 'ladies-stone-earrings', 'Statement earrings with stone accents.', 890, null, 'ld2', 160, 'LD-002'],
+  ['clothing', 'Cotton Casual Shirt', 'cotton-casual-shirt', 'Breathable cotton shirt for everyday wear.', 2490, 2990, 'https://images.unsplash.com/photo-1651761179569-4ba2aa054997', 120, 'CL-001'],
+  ['clothing', 'Slim Fit Jeans', 'slim-fit-jeans', 'Stretch-denim slim fit jeans.', 3290, null, 'https://images.unsplash.com/photo-1714143136372-ddaf8b606da7', 95, 'CL-002'],
+  ['clothing', 'Printed Kurta', 'printed-kurta', 'Lightweight printed cotton kurta.', 1990, 2390, 'https://images.unsplash.com/photo-1770359993283-a2c2f386584e', 140, 'CL-003'],
+  ['mobile-accessories', 'Fast-Charge Power Bank 20000mAh', 'power-bank-20000', 'Dual USB-C fast charging power bank.', 3990, null, 'https://images.unsplash.com/photo-1706275399494-fb26bbc5da63', 80, 'MA-001'],
+  ['mobile-accessories', 'Wireless Earbuds Pro', 'wireless-earbuds-pro', 'Bluetooth 5.3 earbuds with charging case.', 4490, 5490, 'https://images.unsplash.com/photo-1632200004922-bc18602c79fc', 60, 'MA-002'],
+  ['mobile-accessories', 'Tempered Glass Screen Protector', 'tempered-glass-protector', '9H hardness tempered glass, universal fit.', 490, null, '/products/tempered-glass-protector.svg', 300, 'MA-003'],
+  ['herbal-products', 'Herbal Immunity Booster', 'herbal-immunity-booster', 'Natural herbal supplement for daily immunity.', 1590, null, 'https://images.unsplash.com/photo-1664786908163-85ca46f85138', 200, 'HP-001'],
+  ['herbal-products', 'Herbal Hair Oil', 'herbal-hair-oil', 'Cold-pressed herbal oil blend for hair growth.', 990, 1290, 'https://images.unsplash.com/photo-1608571424266-edeb9bbefdec', 180, 'HP-002'],
+  ['herbal-products', 'Herbal Green Tea', 'herbal-green-tea', 'Antioxidant-rich herbal green tea, 100 bags.', 690, null, 'https://images.unsplash.com/photo-1546648596-d8318bfcf491', 250, 'HP-003'],
+  ['watches', 'Classic Analog Watch', 'classic-analog-watch', 'Stainless steel analog watch with leather strap.', 4990, 5990, 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6', 60, 'WT-001'],
+  ['watches', 'Digital Sports Watch', 'digital-sports-watch', 'Water-resistant digital sports watch.', 2990, null, 'https://images.unsplash.com/photo-1543956872-37cfc5474a71', 70, 'WT-002'],
+  ['gents', 'Gents Leather Wallet', 'gents-leather-wallet', 'Genuine leather bifold wallet.', 1990, null, 'https://images.unsplash.com/photo-1601592996763-f05c9c80a7f1', 150, 'GT-001'],
+  ['gents', 'Gents Formal Belt', 'gents-formal-belt', 'Genuine leather formal belt with metal buckle.', 1490, 1790, 'https://images.unsplash.com/photo-1711443982852-b3df5c563448', 130, 'GT-002'],
+  ['ladies', 'Ladies Embroidered Handbag', 'ladies-embroidered-handbag', 'Hand-embroidered everyday handbag.', 3490, 3990, 'https://images.unsplash.com/photo-1600857062241-98e5dba7f214', 90, 'LD-001'],
+  ['ladies', 'Ladies Stone Earrings', 'ladies-stone-earrings', 'Statement earrings with stone accents.', 890, null, 'https://images.unsplash.com/photo-1638734205377-f21045bf6ebe', 160, 'LD-002'],
 ]
 
-PRODUCT_SEED.forEach(([catSlug, name, slug, description, price, compareAtPrice, imgSeed, stock, sku]) => {
+function productImageVariants(baseUrl) {
+  if (!baseUrl.startsWith('http')) {
+    return { imageUrl: baseUrl, gallery: [] }
+  }
+  return {
+    imageUrl: `${baseUrl}?w=800&q=80&auto=format&fit=crop`,
+    gallery: [`${baseUrl}?w=1400&q=80&auto=format&fit=crop`],
+  }
+}
+
+PRODUCT_SEED.forEach(([catSlug, name, slug, description, price, compareAtPrice, imageBase, stock, sku]) => {
   const category = categoryBySlug(catSlug)
   products.push({
     id: mkId('prod'),
@@ -138,8 +154,7 @@ PRODUCT_SEED.forEach(([catSlug, name, slug, description, price, compareAtPrice, 
     description,
     price,
     compareAtPrice,
-    imageUrl: `https://picsum.photos/seed/${imgSeed}/600/600`,
-    gallery: [`https://picsum.photos/seed/${imgSeed}/900/900`, `https://picsum.photos/seed/${imgSeed}b/900/900`],
+    ...productImageVariants(imageBase),
     stockQuantity: stock,
     sku,
     status: 'approved',
@@ -886,7 +901,7 @@ export function adminCreateProduct(fields) {
     description: fields.description || '',
     price: Number(fields.price) || 0,
     compareAtPrice: fields.compareAtPrice ? Number(fields.compareAtPrice) : null,
-    imageUrl: fields.imageUrl || 'https://picsum.photos/seed/new/600/600',
+    imageUrl: fields.imageUrl || '/products/placeholder.svg',
     gallery: fields.gallery || [],
     stockQuantity: Number(fields.stockQuantity) || 0,
     sku: fields.sku || '',

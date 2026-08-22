@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Search, Package, Plus, Pencil, Check, X, Archive } from 'lucide-react'
+import { Search, Package, Plus, Pencil, Check, X, Archive, Upload, ImageOff } from 'lucide-react'
 import { adminProductService } from '@/services/adminProductService'
 import { useToast } from '@/context/ToastContext'
 import PageHeader from '@/components/layout/PageHeader'
@@ -44,6 +44,26 @@ export default function AdminProducts() {
   const [archiveTarget, setArchiveTarget] = useState(null)
   const [archiving, setArchiving] = useState(false)
   const [actioningId, setActioningId] = useState(null)
+  const [imageError, setImageError] = useState('')
+  const fileInputRef = useRef(null)
+
+  function handleImageFile(e) {
+    const file = e.target.files?.[0]
+    e.target.value = ''
+    if (!file) return
+    if (!file.type.startsWith('image/')) {
+      setImageError('Please choose an image file.')
+      return
+    }
+    if (file.size > 3 * 1024 * 1024) {
+      setImageError('Image must be smaller than 3MB.')
+      return
+    }
+    setImageError('')
+    const reader = new FileReader()
+    reader.onload = () => setForm((f) => ({ ...f, imageUrl: reader.result }))
+    reader.readAsDataURL(file)
+  }
 
   function refresh() {
     adminProductService
@@ -76,6 +96,7 @@ export default function AdminProducts() {
     setEditing(null)
     setForm(EMPTY_FORM)
     setFormError('')
+    setImageError('')
     setModalOpen(true)
   }
 
@@ -92,6 +113,7 @@ export default function AdminProducts() {
       imageUrl: p.imageUrl || '',
     })
     setFormError('')
+    setImageError('')
     setModalOpen(true)
   }
 
@@ -297,9 +319,39 @@ export default function AdminProducts() {
               <Label htmlFor="p-stock">Stock quantity</Label>
               <Input id="p-stock" type="number" min="0" value={form.stockQuantity} onChange={(e) => setForm((f) => ({ ...f, stockQuantity: e.target.value }))} />
             </div>
-            <div>
-              <Label htmlFor="p-image">Image URL</Label>
-              <Input id="p-image" value={form.imageUrl} onChange={(e) => setForm((f) => ({ ...f, imageUrl: e.target.value }))} placeholder="https://…" />
+            <div className="sm:col-span-2">
+              <Label htmlFor="p-image">Product image</Label>
+              <div className="flex items-start gap-3">
+                <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-ink-200 bg-ink-50">
+                  {form.imageUrl ? (
+                    <img src={form.imageUrl} alt="Product preview" className="h-full w-full object-cover" />
+                  ) : (
+                    <ImageOff className="h-6 w-6 text-ink-300" />
+                  )}
+                </div>
+                <div className="flex-1 space-y-2">
+                  <Input
+                    id="p-image"
+                    value={form.imageUrl}
+                    onChange={(e) => setForm((f) => ({ ...f, imageUrl: e.target.value }))}
+                    placeholder="https://… (or upload a file)"
+                  />
+                  <div className="flex items-center gap-2">
+                    <Button type="button" size="sm" variant="outline" onClick={() => fileInputRef.current?.click()}>
+                      <Upload className="h-3.5 w-3.5" />
+                      {form.imageUrl ? 'Replace image' : 'Upload image'}
+                    </Button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageFile}
+                    />
+                    {imageError && <span className="text-xs text-danger-600">{imageError}</span>}
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="sm:col-span-2">
               <Label htmlFor="p-desc">Description</Label>

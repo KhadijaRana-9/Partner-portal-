@@ -3,8 +3,15 @@ import { Link } from 'react-router-dom'
 import { productService } from '@/services/productService'
 import { CardSkeleton } from '@/components/ui/Skeleton'
 
-const CATEGORY_IMAGE_SEED = {
-  clothing: 'cl1', 'mobile-accessories': 'ma1', 'herbal-products': 'hp1', watches: 'wt1', gents: 'gt1', ladies: 'ld1',
+// One representative real product photo per category (same verified images
+// used in the seed catalog — see lib/mockBackend.js).
+const CATEGORY_IMAGE = {
+  clothing: 'https://images.unsplash.com/photo-1651761179569-4ba2aa054997',
+  'mobile-accessories': 'https://images.unsplash.com/photo-1706275399494-fb26bbc5da63',
+  'herbal-products': 'https://images.unsplash.com/photo-1664786908163-85ca46f85138',
+  watches: 'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6',
+  gents: 'https://images.unsplash.com/photo-1601592996763-f05c9c80a7f1',
+  ladies: 'https://images.unsplash.com/photo-1600857062241-98e5dba7f214',
 }
 
 export default function Categories() {
@@ -29,7 +36,7 @@ export default function Categories() {
                 className="group relative overflow-hidden rounded-xl border border-ink-200 bg-ink-900"
               >
                 <img
-                  src={`https://picsum.photos/seed/${CATEGORY_IMAGE_SEED[c.slug] || c.slug}/500/400`}
+                  src={`${CATEGORY_IMAGE[c.slug]}?w=500&h=400&q=75&auto=format&fit=crop`}
                   alt={c.name}
                   className="h-40 w-full object-cover opacity-70 transition-transform duration-200 group-hover:scale-105"
                 />
