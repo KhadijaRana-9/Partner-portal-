@@ -1,0 +1,196 @@
+@import "tailwindcss";
+
+/* Class-based dark mode (toggled + persisted via ThemeContext), instead of
+   the media-query default — lets the user override the OS preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Poppins", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand — freight-orange accent (sampled from reference), bold & energetic */
+  --color-brand-50: #fff3ec;
+  --color-brand-100: #ffe3d3;
+  --color-brand-200: #ffc7a6;
+  --color-brand-300: #ffa374;
+  --color-brand-400: #ff9159;
+  --color-brand-500: #ff7d44;
+  --color-brand-600: #f2611f;
+  --color-brand-700: #cc4c14;
+  --color-brand-800: #a63d10;
+  --color-brand-900: #82300d;
+  --color-brand-950: #481a07;
+
+  /* Navy — deep teal-navy structural chrome (sidebar, headers), from reference */
+  --color-navy-50: #eef6f7;
+  --color-navy-100: #d3e7ea;
+  --color-navy-200: #abd0d6;
+  --color-navy-300: #7bb3bd;
+  --color-navy-400: #4a94a3;
+  --color-navy-500: #2c7383;
+  --color-navy-600: #1c5a6b;
+  --color-navy-700: #124655;
+  --color-navy-800: #0a3540;
+  --color-navy-900: #012b37;
+  --color-navy-950: #011b22;
+
+  /* Elevated surface — cards, modals, tables, dropdowns. A dedicated token
+     (rather than reusing `white`) so text-white-on-color stays untouched
+     while surfaces still flip cleanly in dark mode. */
+  --color-surface: #ffffff;
+  --color-surface-hover: #f8fafc;
+
+  /* Ink / neutrals */
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-900: #0f172a;
+  --color-ink-950: #020617;
+
+  /* Semantic */
+  --color-success-50: #f0fdf4;
+  --color-success-100: #dcfce7;
+  --color-success-500: #22c55e;
+  --color-success-600: #16a34a;
+  --color-success-700: #15803d;
+
+  --color-warning-50: #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #f59e0b;
+  --color-warning-600: #d97706;
+  --color-warning-700: #b45309;
+
+  --color-danger-50: #fef2f2;
+  --color-danger-100: #fee2e2;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+
+  --color-info-50: #eff6ff;
+  --color-info-100: #dbeafe;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+  --color-info-700: #1d4ed8;
+
+  /* Tier colors */
+  --color-tier-affiliate: #64748b;
+  --color-tier-referral: #0891b2;
+  --color-tier-reseller: #7c3aed;
+  --color-tier-certified: #2563eb;
+  --color-tier-strategic: #b45309;
+
+  --shadow-card: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.06);
+  --shadow-panel: 0 4px 6px -1px rgb(15 23 42 / 0.05), 0 10px 30px -5px rgb(15 23 42 / 0.08);
+
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-slide-up: slide-up 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-in-right: slide-in-right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-scale-in: scale-in 0.15s ease-out;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(16px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+}
+
+/* Dark theme — the entire neutral ramp flips (ink-50 becomes near-black,
+   ink-900 becomes near-white), which is what every `bg-ink-*`/`text-ink-*`/
+   `border-ink-*` utility already resolves through. Semantic chip colors
+   (success/warning/danger/info/brand light steps) get dark-appropriate
+   translucent equivalents so status badges don't glow white on a dark card. */
+.dark {
+  --color-surface: #101a23;
+  --color-surface-hover: #16222d;
+
+  --color-ink-50: #0b141c;
+  --color-ink-100: #101a23;
+  --color-ink-200: #1c2b38;
+  --color-ink-300: #2c3f4e;
+  --color-ink-400: #5b7386;
+  --color-ink-500: #8296a6;
+  --color-ink-600: #a7b7c4;
+  --color-ink-700: #c7d2da;
+  --color-ink-800: #e2e8ee;
+  --color-ink-900: #f4f7fa;
+  --color-ink-950: #ffffff;
+
+  --color-success-50: #0c1f16;
+  --color-success-100: #123321;
+  --color-success-600: #34d399;
+  --color-success-700: #6ee7b7;
+
+  --color-warning-50: #241a06;
+  --color-warning-100: #33270a;
+  --color-warning-600: #fbbf24;
+  --color-warning-700: #fcd34d;
+
+  --color-danger-50: #240c0c;
+  --color-danger-100: #341313;
+  --color-danger-600: #f87171;
+  --color-danger-700: #fca5a5;
+
+  --color-info-50: #0c1b2e;
+  --color-info-100: #122c47;
+  --color-info-600: #60a5fa;
+  --color-info-700: #93c5fd;
+
+  --color-brand-50: #241206;
+  --color-brand-100: #3a1f0d;
+  --color-brand-700: #ff9159;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-ink-200);
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-ink-50);
+    color: var(--color-ink-900);
+  }
+  ::selection {
+    background-color: var(--color-brand-200);
+    color: var(--color-brand-900);
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ink-300) transparent;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: var(--color-ink-300);
+    border-radius: 999px;
+  }
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
