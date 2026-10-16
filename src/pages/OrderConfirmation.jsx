@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { CheckCircle2, Loader2 } from 'lucide-react'
 import { orderService } from '@/services/orderService'
 import OrderStatusBadge from '@/components/orders/OrderStatusBadge'
@@ -9,11 +9,13 @@ import { formatCurrency, formatDateTime } from '@/lib/utils'
 
 export default function OrderConfirmation() {
   const { orderId } = useParams()
+  const [searchParams] = useSearchParams()
+  const token = searchParams.get('token')
   const [order, setOrder] = useState(null)
 
   useEffect(() => {
-    orderService.getOrderById(orderId).then(setOrder)
-  }, [orderId])
+    orderService.getOrderById(orderId, token).then(setOrder)
+  }, [orderId, token])
 
   if (!order) {
     return (

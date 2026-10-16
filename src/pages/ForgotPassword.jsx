@@ -54,7 +54,7 @@ export default function ForgotPassword() {
             <>
               <h2 className="font-display text-lg font-semibold text-ink-900">Reset your password</h2>
               <p className="mt-1.5 text-sm text-ink-500">Enter your email and we'll send you a reset link.</p>
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
                 <div>
                   <Label htmlFor="reset-email">Email address</Label>
                   <Input

@@ -103,7 +103,7 @@ export default function Checkout() {
         proofNote: null,
       })
       clear()
-      navigate(`/order-confirmation/${order.id}`)
+      navigate(`/order-confirmation/${order.id}?token=${order.accessToken}`)
     } catch (err) {
       setServerError(err.message || 'Something went wrong placing your order. Please try again.')
     } finally {
@@ -115,7 +115,7 @@ export default function Checkout() {
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
       <h1 className="font-display text-2xl font-bold text-ink-900">Checkout</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <form onSubmit={handleSubmit} noValidate className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Card>
             <CardHeader><CardTitle>Contact details</CardTitle></CardHeader>

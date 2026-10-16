@@ -133,7 +133,7 @@ export default function Registration() {
     const next = {}
     if (!form.fullName.trim()) next.fullName = 'Full name is required.'
     if (!/^\S+@\S+\.\S+$/.test(form.email)) next.email = 'Enter a valid email address.'
-    if (!form.phone.trim() || form.phone.trim().length < 7) next.phone = 'Enter a valid phone number.'
+    if (!/^\+?[0-9 ()-]{7,15}$/.test(form.phone.trim())) next.phone = 'Enter a valid phone number.'
     if (!form.city.trim()) next.city = 'City is required.'
     if (form.password.length < 8) next.password = 'Password must be at least 8 characters.'
     if (form.confirmPassword !== form.password) next.confirmPassword = 'Passwords do not match.'
@@ -250,7 +250,7 @@ export default function Registration() {
                 </div>
               )}
 
-              <form onSubmit={handleContinueToVerify} className="mt-6 space-y-4">
+              <form onSubmit={handleContinueToVerify} noValidate className="mt-6 space-y-4">
                 <div>
                   <Label htmlFor="fullName">Full name</Label>
                   <Input id="fullName" icon={User} value={form.fullName} onChange={(e) => update('fullName', e.target.value)} placeholder="Ayesha Raza" />

@@ -21,6 +21,7 @@ function orderFromRow(row, items = [], proofs = []) {
     subtotal: Number(row.subtotal),
     shippingFee: Number(row.shipping_fee),
     total: Number(row.total),
+    accessToken: row.access_token,
     status: row.status,
     adminNote: row.admin_note,
     returnReason: row.return_reason,
@@ -98,14 +99,14 @@ const realOrderService = {
     return orderFromRow(order, itemRows, proofs)
   },
 
-  async getOrderById(orderId) {
-    const { data: order, error } = await supabase.from('orders').select('*').eq('id', orderId).single()
-    if (error) throw error
-    const [{ data: items }, { data: proofs }] = await Promise.all([
-      supabase.from('order_items').select('*').eq('order_id', orderId),
-      supabase.from('payment_proofs').select('*').eq('order_id', orderId),
-    ])
-    return orderFromRow(order, items ?? [], proofs ?? [])
+  // `token` is the order's access_token (carried in the confirmation-page
+  // URL for guest checkouts) — required for a guest to read their own order,
+  // ignored for a logged-in affiliate/admin since get_order_full() already
+  // authorizes those via auth_affiliate_id()/is_admin(). See migration 0006.
+  async getOrderById(orderId, token) {
+    const { data, error } = await supabase.rpc('get_order_full', { p_order_id: orderId, p_token: token ?? null })
+    if (error) throw new Error(error.message)
+    return orderFromRow(data.order, data.items ?? [], data.proofs ?? [])
   },
 
   async listMyOrders(affiliateId) {
